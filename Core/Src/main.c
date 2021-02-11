@@ -93,6 +93,7 @@ int main(void)
   uint8_t count = 0;
   uint8_t toggle = 0;
   uint32_t timestamp = 0;
+  uint32_t samp = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,10 +104,13 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  //sw press is LOW
+	  if(HAL_GetTick() - samp >= 50){
+		  samp = HAL_GetTick();
 	  	  Sw_state = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
 	  	  if(Sw_state == 0){
+	  		  while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) == 0);
 	  		  count = count + 1;
-	  		  toggle = count%2;
+	  		  toggle = count % 2;
 	  	  }
 	  	  if(toggle == 0){
 	  		  if(HAL_GetTick()- timestamp >= 500){
@@ -132,6 +136,7 @@ int main(void)
 	  			  }
 	  		  }
 	  	  }
+	  }
   }
   /* USER CODE END 3 */
 }
